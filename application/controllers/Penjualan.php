@@ -1,9 +1,11 @@
 <?php
 class Penjualan extends Controllers
 {
+
     // * method tampilan awal data pembelian
     public function index()
     {
+
         // * jika sesi sudah berakhir
         if (!isset($_SESSION["data"]["nama"])) {
             $pesan = "Sesi telah berakhir";
@@ -48,6 +50,13 @@ class Penjualan extends Controllers
         // * tampilkan data no_trans di tabel jual berdasarkan tanggal saat ini
         $date = date("Y-m-d");
         $no_trans = $this->model("Penjualan_model")->no_trans($date);
+
+        if ($no_trans == false) {
+            $no_trans = null;
+        } else {
+            $no_trans = $no_trans;
+        }
+
         // ? cek apakah no trans sudah ada
         if ($no_trans["no_trans"] != null) {
             // * jika ada maka ambil data 10 digit no trans
@@ -84,19 +93,17 @@ class Penjualan extends Controllers
     // * untuk menampilkan file pdf di browser
     public function printpdf($no_trans)
     {
+        ob_start();
         // * tampilkan data berdasarkan no transaksi
         $this->data["data"] = $this->model("Penjualan_model")->tampil_no_trans($no_trans);
 
         // * tampilkan nama perusahaan dan alamat perusahaan
         $this->data["perusahaan"] = $this->model("Pengaturan_model")->tampil();
 
-        ob_start();
         // * text html
         $this->view("penjualan/print", $this->data);
-        $content = ob_get_clean();
         $html2pdf = new HTML2PDF('P', 'A4', 'en', false, 'UTF-8', array(20, 10, 20, 0));
         $html2pdf->setDefaultFont('Arial');
-        $html2pdf->writeHTML($content);
-        $html2pdf->Output("Kwitansi Pembayaran.pdf");
+        $html2pdf->Output("Kwitansi Pembayaran.pdf","FI");
     }
 }

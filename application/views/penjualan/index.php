@@ -232,9 +232,6 @@
                                                 <th class="text-center">Total</th>
                                                 <th class="text-center">Qty</th>
                                                 <th class="text-center">Pengunggah</th>
-                                                <th class="text-center">
-                                                    <i class="fas fa-print"></i>
-                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody class="small">
@@ -251,13 +248,6 @@
                                                     <td>Rp <?php echo format($jual["total_harga"]) ?></td>
                                                     <td class="text-center"><?php echo $jual["qty"] ?></td>
                                                     <td class="text-center"><?php echo $jual["uploader"] . " | " . tanggal($jual["tanggal"]) ?></td>
-                                                    <td class="text-center">
-                                                        <a href="<?php echo BASEURL ?>penjualan/printpdf/<?php echo $jual["no_trans"] ?>">
-                                                            <button type=" button" class="btn btn-primary btn-sm">
-                                                                <i class="fas fa-download"></i>
-                                                            </button>
-                                                        </a>
-                                                    </td>
                                                 </tr>
                                             <?php endforeach ?>
                                         </tbody>

@@ -12,14 +12,16 @@ class Routes
     {
         // * hasil nilai method getURL()
         $url = $this->getURL();
-
         // ? cek apakah didalam folder controllers,terdapat nama yang sama dengan
         // ? isi index array $url[0]
-        if (file_exists("application/controllers/" . ucfirst($url[0]) . ".php")) {
-            // * jika ada maka masukan isi $url[0] kedalam property
-            $this->controller = ucfirst($url[0]);
-            // * hapus $url[0] = controller 
-            unset($url[0]);
+        if(!empty($url))
+        {
+            if (file_exists("application/controllers/" . ucfirst($url[0]) . ".php")) {
+                // * jika ada maka masukan isi $url[0] kedalam property
+                $this->controller = ucfirst($url[0]);
+                // * hapus $url[0] = controller 
+                unset($url[0]);
+            }
         }
 
         // * require once file yang berada didalam folder controllers

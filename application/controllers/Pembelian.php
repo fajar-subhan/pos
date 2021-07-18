@@ -5,7 +5,8 @@ class Pembelian extends Controllers
     public function index()
     {
         // * jika sesi sudah berakhir
-        if (!isset($_SESSION["data"]["nama"])) {
+        if (!isset($_SESSION["data"]["nama"])) 
+        {
             $pesan = "Sesi telah berakhir";
             $pesan = urlencode($pesan);
             header("location:" . BASEURL . "$pesan");
@@ -25,13 +26,27 @@ class Pembelian extends Controllers
         $date = date("Y-m-d");
         // * ambil data no trans terakhir berdasarkan tanggal saat ini
         $no_trans = $this->model("Pembelian_model")->no_trans($date);
+        
+        if($no_trans == false)
+        {
+            $no_trans['no_trans'] = null;
+        }
+        else 
+        {
+            $no_trans = $no_trans;
+        }
+
+
         // ? cek apakah no trans terakhir ada 
-        if ($no_trans["no_trans"] != null) {
+        if ($no_trans["no_trans"] != null) 
+        {
             // * jika ada maka ambil data 10 digit no trans
             $ambil = substr($no_trans["no_trans"], 10);
             // * tambahkan 1 pada no_trans pada 10 digit dan tambahkan angka 0 disebelah kiri
             $kode = str_pad($ambil + 1, 4, "0", STR_PAD_LEFT);
-        } else {
+        } 
+        else 
+        {
             // * jika data no trans tidak ada,maka gunakan  default
             $kode = "0001";
         }
