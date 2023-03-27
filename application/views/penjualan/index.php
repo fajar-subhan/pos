@@ -232,6 +232,8 @@
                                                 <th class="text-center">Total</th>
                                                 <th class="text-center">Qty</th>
                                                 <th class="text-center">Pengunggah</th>
+                                                <th class="text-center"><i class="fas fa-print"></i></th>
+
                                             </tr>
                                         </thead>
                                         <tbody class="small">
@@ -239,7 +241,7 @@
                                             $no = 0;
                                             foreach ($data["data"] as $jual) :
                                                 $no++;
-                                                ?>
+                                            ?>
                                                 <tr>
                                                     <td class="text-center"><?php echo $no ?></td>
                                                     <td><?php echo $jual["nama_pembeli"] ?></td>
@@ -248,6 +250,13 @@
                                                     <td>Rp <?php echo format($jual["total_harga"]) ?></td>
                                                     <td class="text-center"><?php echo $jual["qty"] ?></td>
                                                     <td class="text-center"><?php echo $jual["uploader"] . " | " . tanggal($jual["tanggal"]) ?></td>
+                                                    <td>
+                                                        <a href="<?php echo BASEURL ?>penjualan/printpdf/<?php echo $jual['no_trans'] ?>">
+                                                            <button type="button" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-download"></i>
+                                                            </button>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             <?php endforeach ?>
                                         </tbody>

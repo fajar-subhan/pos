@@ -93,17 +93,97 @@ class Penjualan extends Controllers
     // * untuk menampilkan file pdf di browser
     public function printpdf($no_trans)
     {
-        ob_start();
         // * tampilkan data berdasarkan no transaksi
         $this->data["data"] = $this->model("Penjualan_model")->tampil_no_trans($no_trans);
 
         // * tampilkan nama perusahaan dan alamat perusahaan
         $this->data["perusahaan"] = $this->model("Pengaturan_model")->tampil();
 
-        // * text html
-        $this->view("penjualan/print", $this->data);
-        $html2pdf = new HTML2PDF('P', 'A4', 'en', false, 'UTF-8', array(20, 10, 20, 0));
+        $html2pdf = new Html2Pdf('P', 'A4', 'en');
         $html2pdf->setDefaultFont('Arial');
-        $html2pdf->Output("Kwitansi Pembayaran.pdf","FI");
+        $html2pdf->writeHTML($this->get_html($this->data));
+
+        $html2pdf->Output("Kwitansi Pembayaran.pdf", "FI");
+    }
+
+    public function get_html($data = [])
+    {
+        $nama_perusahaan = $data["perusahaan"]["nama_perusahaan"];
+        $alamat          = $data["perusahaan"]["alamat_perusahaan"];
+        $no_trans        = $data["data"]["no_trans"];
+        $nama_pembeli    = $data["data"]["nama_pembeli"];
+        $nama_barang     = $data["data"]["nama_barang"];
+        $harga_jual      = $data["data"]["harga_jual"];
+        $qty             = $data["data"]["qty"];
+        $total_harga     = number_format($data["data"]["total_harga"], 0, ",", ".");
+
+        $content = "
+        <div>
+            <h1 style='text-align:center'>$nama_perusahaan</h1>
+            <p style='text-align:center'>$alamat</p>
+        </div>
+        <hr>
+        <br />
+
+        <style>
+                table,tr,td,th {
+                    border:1px sold black;
+                    border-collapse: collapse;
+                }
+
+                td,
+            th {
+                padding: 10px 36px;
+            }
+        </style>
+
+        <div>
+            <h3 style='text-align:center'>Kwitansi Pembayaran</h3>
+            <h4  style='text-align:center'>No. $no_trans</h4>
+            <table>
+                <tr>
+                    <td>
+                        <strong>Sudah Terima Dari</strong>
+                    </td>
+                    <td>:</td>
+                    <td>Bpk/Ibu $nama_pembeli</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <strong>Uang Sejumlah</strong>
+                    </td>
+                    <td>:</td>
+                    <td>Rp. $total_harga </td>
+                </tr>
+            </table>
+
+            <p>Untuk pembayaran :</p>
+            <br >
+            <table id='detail' border='1'>
+                <thead style='text-align:center;'>
+                    <tr>
+                        <th>Nama Barang</th>
+                        <th>Harga</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    <tr>
+                        <td>$nama_barang</td>
+                        <td>Rp. $harga_jual</td>
+                        <td>$qty</td>
+                        <td>Rp $total_harga</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        ";
+
+        return $content;
     }
 }
